@@ -22,13 +22,13 @@
   <ellipse cx="180" cy="630" rx="390" ry="260" fill="url(#glowBL)"/>
 
   <!-- badge -->
-  <rect x="64" y="72" width="168" height="28" rx="14" fill="#7C3AED" fill-opacity="0.22" stroke="#A78BFA" stroke-opacity="0.55"/>
-  <text x="148" y="90.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="2" fill="#C4B5FD" text-anchor="middle">OBSIDIAN PLUGIN</text>
+  <rect x="64" y="234" width="168" height="28" rx="14" fill="#7C3AED" fill-opacity="0.22" stroke="#A78BFA" stroke-opacity="0.55"/>
+  <text x="148" y="252.5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="2" fill="#C4B5FD" text-anchor="middle">OBSIDIAN PLUGIN</text>
 
   <!-- title + tagline -->
-  <text x="64" y="162" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="50" font-weight="700" fill="#FFFFFF">Awesome Yearbook</text>
-  <text x="64" y="204" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="19" fill="#B4A9D6">Writing stats, heatmaps, streaks and vault</text>
-  <text x="64" y="231" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="19" fill="#B4A9D6">health — plus a one-tap Year in Review card.</text>
+  <text x="64" y="324" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="50" font-weight="700" fill="#FFFFFF">Awesome Yearbook</text>
+  <text x="64" y="366" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="19" fill="#B4A9D6">Writing stats, heatmaps, streaks and vault</text>
+  <text x="64" y="393" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="19" fill="#B4A9D6">health — plus a one-tap Year in Review card.</text>
 
   <!-- dashboard screenshot (back) -->
   <g filter="url(#shadow)">
@@ -47,5 +47,5 @@
   <rect x="905" y="40" width="315" height="560" rx="12" fill="none" stroke="#FFFFFF" stroke-opacity="0.18"/>
 
   <!-- foot -->
-  <text x="64" y="560" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" fill="#8B7FB8">100% local · zero telemetry · no account</text>
+  <text x="64" y="448" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" fill="#8B7FB8">100% local · zero telemetry · no account</text>
 </svg>

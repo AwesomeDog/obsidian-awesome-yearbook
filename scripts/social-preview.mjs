@@ -27,10 +27,10 @@ const COPY = {
 const W = 1280;
 const H = 640;
 
-const badge = { x: 64, y: 72, h: 28, font: 13 };
-const title = { x: 64, y: 162, font: 50 };
-const tagline = { x: 64, y: 204, font: 19, line: 27 };
-const foot = { x: 64, y: 560, font: 14 };
+const badge = { x: 64, y: 234, h: 28, font: 13 };
+const title = { x: 64, y: 324, font: 50 };
+const tagline = { x: 64, y: 366, font: 19, line: 27 };
+const foot = { x: 64, y: 448, font: 14 };
 
 // dashboard screenshot (docs/screenshots/overview.svg, 1240x1214) cropped to
 // its top 798px: header + Today + Range overview + Writing trend.
