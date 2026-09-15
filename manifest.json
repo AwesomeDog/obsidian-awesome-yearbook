@@ -1,7 +1,7 @@
 {
   "id": "awesome-yearbook",
   "name": "Awesome Yearbook",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "minAppVersion": "1.13.7",
   "description": "A beautiful, zero-config dashboard of your vault's writing stats: heatmaps, streaks, top tags, folder treemaps, and shareable year-in-review cards. Nothing is stored — every number is recomputed from a single scan.",
   "author": "AwesomeDog",
