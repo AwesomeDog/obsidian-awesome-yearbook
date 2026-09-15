@@ -1,0 +1,1686 @@
+/* ============================================================================
+   Awesome Yearbook · dashboard styles
+
+   Loaded inside the view's shadow root. Typography and layout are owned by
+   the dashboard; only colour variables come from the Obsidian theme.
+   The share card keeps its own palette and never reads these tokens.
+
+   Tokens are prefixed `--yb-` so they cannot collide with (and cycle into)
+   Obsidian variables of the same name such as `--text-normal`.
+   ========================================================================= */
+
+/* The host is Obsidian's contentEl. Shadow !important rules keep its padding
+   and scrolling from being overridden by themes or snippets. */
+:host {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.awesome-yearbook-view {
+  /* Inherited properties cross the shadow boundary; colour variables do too. */
+  all: initial;
+  direction: ltr;
+  color-scheme: inherit;
+
+  /* ---- 1. primitives ---------------------------------------------------- */
+  --yb-accent-h: 254;
+  --yb-accent-s: 80%;
+  --yb-accent-l: 68%;
+
+  --yb-size-2-1: 2px;
+  --yb-size-2-2: 4px;
+  --yb-size-2-3: 6px;
+  --yb-size-4-1: 4px;
+  --yb-size-4-2: 8px;
+  --yb-size-4-3: 12px;
+  --yb-size-4-4: 16px;
+  --yb-size-4-5: 20px;
+  --yb-size-4-6: 24px;
+  --yb-size-4-8: 32px;
+  --yb-size-4-12: 48px;
+
+  --yb-radius-s: 4px;
+  --yb-radius-m: 8px;
+  --yb-radius-l: 12px;
+  --yb-radius-xl: 18px;
+
+  --yb-font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --yb-font-mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+  --yb-fs-xs: 11px;
+  --yb-fs-s: 12px;
+  --yb-fs-m: 13px;
+  --yb-fs-l: 15px;
+  --yb-fs-xl: 20px;
+  --yb-fw: 400;
+  --yb-fw-m: 500;
+  --yb-fw-sb: 600;
+  --yb-fw-b: 700;
+
+  --yb-page-max: 1320px;
+  --yb-header-h: 60px;
+  --yb-nav-h: 42px;
+  --yb-inspector-w: 344px;
+
+  /* colour primitives ← Obsidian theme */
+  --yb-base-00: var(--background-primary);
+  --yb-base-05: var(--background-primary-alt);
+  --yb-base-10: var(--background-primary-alt);
+  --yb-base-20: var(--background-secondary);
+  --yb-base-25: var(--background-secondary-alt);
+  --yb-base-30: var(--background-modifier-border);
+  --yb-base-35: var(
+    --background-modifier-border-hover,
+    var(--background-modifier-border)
+  );
+  --yb-base-40: var(--text-faint);
+  --yb-base-50: var(--text-faint);
+  --yb-base-60: var(--text-muted);
+  --yb-base-70: var(--text-muted);
+  --yb-base-100: var(--text-normal);
+  --yb-red: var(--color-red, #e93147);
+  --yb-orange: var(--color-orange, #e9973f);
+  --yb-cyan: var(--color-cyan, #53dfdd);
+  --yb-mod-hover: var(--background-modifier-hover);
+  --yb-mod-active: var(
+    --background-modifier-active-hover,
+    var(--background-modifier-hover)
+  );
+  --yb-grid: var(--background-modifier-border);
+  --yb-scroll-thumb: var(--background-modifier-border);
+  --yb-shadow-s: 0 1px 2px rgb(0 0 0 / 16%);
+  --yb-shadow-m: 0 2px 10px rgb(0 0 0 / 18%);
+  --yb-shadow-l: 0 16px 44px rgb(0 0 0 / 40%), 0 2px 10px rgb(0 0 0 / 20%);
+
+  /* ---- 2. semantic ------------------------------------------------------ */
+  --yb-bg-page: var(--yb-base-20);
+  --yb-bg-panel: var(--yb-base-00);
+  --yb-bg-sunken: var(--yb-base-10);
+  --yb-border: var(--yb-base-30);
+  --yb-border-strong: var(--yb-base-35);
+
+  --yb-text: var(--yb-base-100);
+  --yb-text-muted: var(--yb-base-70);
+  --yb-text-faint: var(--yb-base-50);
+  --yb-text-accent: hsl(
+    var(--yb-accent-h),
+    var(--yb-accent-s),
+    var(--yb-accent-l)
+  );
+  --yb-text-on-accent: #fff;
+
+  --yb-interactive: var(--yb-base-20);
+  --yb-interactive-hover: var(--yb-base-25);
+  --yb-accent: hsl(var(--yb-accent-h), var(--yb-accent-s), var(--yb-accent-l));
+  --yb-accent-hover: hsl(
+    var(--yb-accent-h),
+    var(--yb-accent-s),
+    calc(var(--yb-accent-l) - 6%)
+  );
+  --yb-accent-soft: hsla(
+    var(--yb-accent-h),
+    var(--yb-accent-s),
+    var(--yb-accent-l),
+    0.34
+  );
+  --yb-accent-faint: hsla(
+    var(--yb-accent-h),
+    var(--yb-accent-s),
+    var(--yb-accent-l),
+    0.12
+  );
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  container-type: inline-size;
+  container-name: yb;
+  background: var(--yb-bg-page);
+  color: var(--yb-text);
+  font-family: var(--yb-font-ui);
+  font-size: var(--yb-fs-m);
+  font-weight: var(--yb-fw);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The dashboard may override the app theme; the share card never reads these. */
+.awesome-yearbook-view.is-dark {
+  --yb-base-00: #1e1e1e;
+  --yb-base-05: #212121;
+  --yb-base-10: #242424;
+  --yb-base-20: #282828;
+  --yb-base-25: #2e2e2e;
+  --yb-base-30: #383838;
+  --yb-base-35: #424242;
+  --yb-base-40: #555555;
+  --yb-base-50: #6b6b6b;
+  --yb-base-60: #8f8f8f;
+  --yb-base-70: #b9b9b9;
+  --yb-base-100: #dcdcdc;
+  --yb-mod-hover: rgb(255 255 255 / 7%);
+  --yb-mod-active: rgb(255 255 255 / 11%);
+  --yb-grid: rgb(255 255 255 / 7%);
+  --yb-scroll-thumb: rgb(255 255 255 / 14%);
+  --yb-shadow-s: 0 1px 2px rgb(0 0 0 / 30%);
+  --yb-shadow-m: 0 2px 10px rgb(0 0 0 / 28%);
+  --yb-shadow-l: 0 16px 44px rgb(0 0 0 / 50%), 0 2px 10px rgb(0 0 0 / 34%);
+  color-scheme: dark;
+}
+
+.awesome-yearbook-view.is-light {
+  --yb-base-00: #ffffff;
+  --yb-base-05: #fcfcfc;
+  --yb-base-10: #fafafa;
+  --yb-base-20: #f4f4f5;
+  --yb-base-25: #ececee;
+  --yb-base-30: #e4e4e7;
+  --yb-base-35: #d6d6da;
+  --yb-base-40: #c2c2c8;
+  --yb-base-50: #a0a0a8;
+  --yb-base-60: #75757d;
+  --yb-base-70: #57575f;
+  --yb-base-100: #1f1f23;
+  --yb-mod-hover: rgb(0 0 0 / 4.5%);
+  --yb-mod-active: rgb(0 0 0 / 8%);
+  --yb-grid: rgb(0 0 0 / 6%);
+  --yb-scroll-thumb: rgb(0 0 0 / 16%);
+  --yb-shadow-s: 0 1px 2px rgb(0 0 0 / 5%);
+  --yb-shadow-m: 0 2px 10px rgb(0 0 0 / 6%);
+  --yb-shadow-l: 0 16px 44px rgb(0 0 0 / 14%), 0 2px 10px rgb(0 0 0 / 6%);
+  color-scheme: light;
+}
+
+/* ---- 3. reset ----------------------------------------------------------- */
+.awesome-yearbook-view,
+.awesome-yearbook-view *,
+.awesome-yearbook-view *::before,
+.awesome-yearbook-view *::after {
+  box-sizing: border-box;
+}
+
+.awesome-yearbook-view h1,
+.awesome-yearbook-view h2,
+.awesome-yearbook-view h3,
+.awesome-yearbook-view h4,
+.awesome-yearbook-view p,
+.awesome-yearbook-view dl,
+.awesome-yearbook-view dd,
+.awesome-yearbook-view dt,
+.awesome-yearbook-view figure,
+.awesome-yearbook-view ol,
+.awesome-yearbook-view ul {
+  margin: 0;
+}
+
+.awesome-yearbook-view ul,
+.awesome-yearbook-view ol {
+  padding: 0;
+  list-style: none;
+}
+
+.awesome-yearbook-view button,
+.awesome-yearbook-view input,
+.awesome-yearbook-view select,
+.awesome-yearbook-view textarea {
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+
+.awesome-yearbook-view ::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+.awesome-yearbook-view ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.awesome-yearbook-view ::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 8px;
+  background: var(--yb-scroll-thumb);
+  background-clip: content-box;
+}
+
+/* ---- 4. primitives ----------------------------------------------------- */
+.awesome-yearbook-view .yb-svg-icon {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.awesome-yearbook-view .yb-svg-icon.sm {
+  width: 13px;
+  height: 13px;
+}
+
+.awesome-yearbook-view .yb-svg-icon.lg {
+  width: 19px;
+  height: 19px;
+}
+
+.awesome-yearbook-view .icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: var(--yb-radius-s);
+  background: transparent;
+  color: var(--yb-text-muted);
+  cursor: pointer;
+}
+
+.awesome-yearbook-view .icon-btn:hover {
+  background: var(--yb-mod-hover);
+  color: var(--yb-text);
+}
+
+.awesome-yearbook-view .icon-btn.is-active {
+  background: var(--yb-accent-faint);
+  color: var(--yb-text-accent);
+}
+
+.awesome-yearbook-view .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--yb-size-4-1);
+  padding: 6px var(--yb-size-4-3);
+  border: 1px solid var(--yb-border);
+  border-radius: var(--yb-radius-s);
+  background: var(--yb-interactive);
+  font-size: var(--yb-fs-s);
+  font-weight: var(--yb-fw-m);
+  cursor: pointer;
+}
+
+.awesome-yearbook-view .btn:hover {
+  border-color: var(--yb-border-strong);
+  background: var(--yb-interactive-hover);
+}
+
+.awesome-yearbook-view .btn.mod-cta {
+  border-color: transparent;
+  background: var(--yb-accent);
+  color: var(--yb-text-on-accent);
+}
+
+.awesome-yearbook-view .btn.mod-cta:hover {
+  background: var(--yb-accent-hover);
+}
+
+.awesome-yearbook-view .yb-dropdown {
+  appearance: none;
+  padding: 5px 24px 5px var(--yb-size-4-2);
+  border: 1px solid var(--yb-border);
+  border-radius: var(--yb-radius-s);
+  background-color: var(--yb-interactive);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--yb-text-muted) 50%),
+    linear-gradient(135deg, var(--yb-text-muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 13px) 53%,
+    calc(100% - 9px) 53%;
+  background-size:
+    4px 4px,
+    4px 4px;
+  background-repeat: no-repeat;
+  color: var(--yb-text);
+  font-size: var(--yb-fs-s);
+  cursor: pointer;
+}
+
+.awesome-yearbook-view .yb-dropdown:hover {
+  background-color: var(--yb-interactive-hover);
+}
+
+.awesome-yearbook-view input[type="date"],
+.awesome-yearbook-view input[type="number"],
+.awesome-yearbook-view input[type="text"] {
+  padding: 5px var(--yb-size-4-2);
+  border: 1px solid var(--yb-border);
+  border-radius: var(--yb-radius-s);
+  background: var(--yb-bg-sunken);
+  color: var(--yb-text);
+  font-family: inherit;
+  font-size: var(--yb-fs-s);
+}
+
+.awesome-yearbook-view input:focus,
+.awesome-yearbook-view .yb-dropdown:focus,
+.awesome-yearbook-view .btn:focus-visible,
+.awesome-yearbook-view .icon-btn:focus-visible {
+  border-color: var(--yb-accent);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--yb-accent-faint);
+}
+
+.awesome-yearbook-view .toggle {
+  position: relative;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: 9px;
+  background: var(--yb-base-35);
+  cursor: pointer;
+}
+
+.awesome-yearbook-view .toggle.is-on {
+  background: var(--yb-accent);
+}
+
+.awesome-yearbook-view .toggle::after {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--yb-shadow-s);
+  content: "";
+}
+
+.awesome-yearbook-view .toggle.is-on::after {
+  left: 16px;
+}
+
+/* A white knob disappears on the light palette, so it takes the yb-page colour. */
+.awesome-yearbook-view.is-light .toggle:not(.is-on)::after {
+  background: var(--yb-base-00);
+}
+
+.awesome-yearbook-view .segmented {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--yb-border);
+  border-radius: var(--yb-radius-s);
+  background: var(--yb-bg-sunken);
+}
+
+.awesome-yearbook-view .segmented button {
+  padding: 4px var(--yb-size-4-2);
+  border: none;
+  border-radius: 3px;
+  background: none;
+  color: var(--yb-text-muted);
+  font-size: var(--yb-fs-s);
+  cursor: pointer;
+}
+
+.awesome-yearbook-view .segmented button[aria-pressed="true"] {
+  background: var(--yb-bg-panel);
+  box-shadow: var(--yb-shadow-s);
+  color: var(--yb-text);
+  font-weight: var(--yb-fw-m);
+}
+
+/* ---- 5. shell ---------------------------------------------------------- */
+.awesome-yearbook-view .yb-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.awesome-yearbook-view .app-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  border-bottom: 1px solid var(--yb-border);
+  background: var(--yb-bg-panel);
+}
+
+.awesome-yearbook-view .header-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--yb-size-4-4);
+  max-width: var(--yb-page-max);
+  height: var(--yb-header-h);
+  margin: 0 auto;
+  padding: 0 var(--yb-size-4-6);
+}
+
+.awesome-yearbook-view .brand {
+  display: flex;
+  align-items: center;
+  gap: var(--yb-size-4-3);
+}
+
+/* The project icon brings its own colour: no accent tile behind it. */
+.awesome-yearbook-view .brand-mark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+}
+
+.awesome-yearbook-view .brand-mark > svg {
+  width: 26px;
+  height: 26px;
+}
+
+.awesome-yearbook-view .brand-name {
+  font-size: var(--yb-fs-l);
+  font-weight: var(--yb-fw-sb);
+  line-height: 1.2;
+  letter-spacing: -0.2px;
+}
+
+.awesome-yearbook-view .header-meta {
+  display: flex;
+  gap: var(--yb-size-4-4);
+  padding-left: var(--yb-size-4-4);
+  border-left: 1px solid var(--yb-border);
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-s);
+}
+
+.awesome-yearbook-view .header-meta b {
+  color: var(--yb-text-muted);
+  font-weight: var(--yb-fw-m);
+  font-variant-numeric: tabular-nums;
+}
+
+.awesome-yearbook-view .header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--yb-size-4-2);
+  margin-left: auto;
+}
+
+.awesome-yearbook-view .field {
+  display: flex;
+  align-items: center;
+  gap: var(--yb-size-4-2);
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-s);
+}
+
+.awesome-yearbook-view .field[hidden] {
+  display: none;
+}
+
+.awesome-yearbook-view .range-custom {
+  display: flex;
+  align-items: center;
+  gap: var(--yb-size-4-1);
+}
+
+.awesome-yearbook-view .range-custom[hidden] {
+  display: none;
+}
+
+.awesome-yearbook-view .divider-v {
+  width: 1px;
+  height: 20px;
+  background: var(--yb-border);
+}
+
+.awesome-yearbook-view .app-nav {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--yb-size-2-2);
+  max-width: var(--yb-page-max);
+  height: var(--yb-nav-h);
+  margin: 0 auto;
+  padding: 0 var(--yb-size-4-6);
+}
+
+.awesome-yearbook-view .tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 var(--yb-size-4-3) 10px;
+  margin-bottom: -1px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--yb-text-muted);
+  font-size: var(--yb-fs-m);
+  cursor: pointer;
+}
+
+.awesome-yearbook-view .tab:hover {
+  color: var(--yb-text);
+}
+
+.awesome-yearbook-view .tab[aria-selected="true"] {
+  border-bottom-color: var(--yb-accent);
+  color: var(--yb-text-accent);
+  font-weight: var(--yb-fw-m);
+}
+
+.awesome-yearbook-view .nav-meta {
+  margin-left: auto;
+  padding-bottom: 11px;
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-s);
+  font-variant-numeric: tabular-nums;
+}
+
+.awesome-yearbook-view .yb-page {
+  max-width: var(--yb-page-max);
+  margin: 0 auto;
+  padding: var(--yb-size-4-6) var(--yb-size-4-6) var(--yb-size-4-8);
+}
+
+.awesome-yearbook-view .tab-pane {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yb-size-4-3);
+}
+
+.awesome-yearbook-view .tab-pane[hidden] {
+  display: none;
+}
+
+.awesome-yearbook-view .page-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--yb-size-4-4);
+  max-width: var(--yb-page-max);
+  margin: 0 auto;
+  padding: var(--yb-size-4-4) var(--yb-size-4-6) var(--yb-size-4-12);
+  border-top: 1px solid var(--yb-border);
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-xs);
+}
+
+/* ---- 6. panels & data display ------------------------------------------ */
+.awesome-yearbook-view .panel-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--yb-size-4-3);
+}
+
+.awesome-yearbook-view .panel {
+  padding: var(--yb-size-4-4) var(--yb-size-4-5) var(--yb-size-4-5);
+  border: 1px solid var(--yb-border);
+  border-radius: var(--yb-radius-l);
+  background: var(--yb-bg-panel);
+}
+
+.awesome-yearbook-view .panel.span-2 {
+  grid-column: 1 / -1;
+}
+
+.awesome-yearbook-view .panel-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--yb-size-4-2);
+  margin-bottom: var(--yb-size-4-4);
+}
+
+.awesome-yearbook-view .panel-title {
+  font-size: var(--yb-fs-m);
+  font-weight: var(--yb-fw-sb);
+}
+
+.awesome-yearbook-view .panel-desc {
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-s);
+}
+
+.awesome-yearbook-view .panel-header .panel-desc:last-child {
+  margin-left: auto;
+  text-align: right;
+}
+
+.awesome-yearbook-view .chart {
+  width: 100%;
+  height: 238px;
+}
+
+.awesome-yearbook-view .chart.tall {
+  height: 292px;
+}
+
+.awesome-yearbook-view .chart.short {
+  height: 178px;
+}
+
+.awesome-yearbook-view .chart-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.awesome-yearbook-view .chart-missing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-s);
+}
+
+.awesome-yearbook-view .stat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--yb-size-4-3);
+}
+
+.awesome-yearbook-view .stat {
+  padding: 0 var(--yb-size-4-3);
+  border-left: 1px solid var(--yb-border);
+}
+
+.awesome-yearbook-view .stat:first-child {
+  padding-left: 0;
+  border-left: none;
+}
+
+.awesome-yearbook-view .stat dt {
+  color: var(--yb-text-muted);
+  font-size: var(--yb-fs-s);
+}
+
+.awesome-yearbook-view .stat dd {
+  margin: 3px 0 0;
+  font-size: 23px;
+  font-weight: var(--yb-fw-sb);
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.awesome-yearbook-view .stat dd small {
+  margin-left: 3px;
+  color: var(--yb-text-faint);
+  font-size: 12px;
+  font-weight: var(--yb-fw);
+}
+
+.awesome-yearbook-view .stat .sub {
+  display: block;
+  margin-top: 4px;
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-xs);
+  line-height: 1.45;
+}
+
+.awesome-yearbook-view .delta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--yb-accent-faint);
+  color: var(--yb-text-accent);
+  font-size: var(--yb-fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.awesome-yearbook-view .delta.is-down {
+  background: rgb(233 49 71 / 14%);
+  color: var(--yb-red);
+}
+
+.awesome-yearbook-view .kv {
+  display: flex;
+  flex-direction: column;
+}
+
+.awesome-yearbook-view .kv > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--yb-size-4-3);
+  padding: 8px 0;
+  border-top: 1px solid var(--yb-border);
+  font-size: var(--yb-fs-m);
+}
+
+.awesome-yearbook-view .kv > div:first-child {
+  border-top: none;
+}
+
+.awesome-yearbook-view .kv dt {
+  color: var(--yb-text-muted);
+}
+
+.awesome-yearbook-view .kv dd {
+  text-align: right;
+  font-weight: var(--yb-fw-m);
+  font-variant-numeric: tabular-nums;
+}
+
+.awesome-yearbook-view .kv dd em {
+  margin-left: 6px;
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-xs);
+  font-style: normal;
+  font-weight: var(--yb-fw);
+}
+
+.awesome-yearbook-view .meter-row {
+  display: grid;
+  grid-template-columns: 54px 1fr 78px;
+  align-items: center;
+  gap: var(--yb-size-4-2);
+  padding: 5px 0;
+  font-size: var(--yb-fs-s);
+}
+
+.awesome-yearbook-view .meter-row.mod-tag {
+  grid-template-columns: 92px 1fr 64px;
+}
+
+.awesome-yearbook-view .meter {
+  height: 8px;
+  overflow: hidden;
+  border: 1px solid var(--yb-border);
+  border-radius: 4px;
+  background: var(--yb-bg-sunken);
+}
+
+.awesome-yearbook-view .meter > i {
+  display: block;
+  height: 100%;
+  background: var(--yb-accent);
+}
+
+.awesome-yearbook-view .meter > i.is-soft {
+  background: var(--yb-accent-soft);
+}
+
+.awesome-yearbook-view .meter-row .lbl {
+  overflow: hidden;
+  color: var(--yb-text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.awesome-yearbook-view .meter-row .num {
+  text-align: right;
+  color: var(--yb-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.awesome-yearbook-view .note-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.awesome-yearbook-view .note-item {
+  display: flex;
+  align-items: center;
+  gap: var(--yb-size-4-2);
+  width: 100%;
+  padding: 6px var(--yb-size-4-2);
+  border: none;
+  border-radius: var(--yb-radius-s);
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.awesome-yearbook-view .note-item:hover {
+  background: var(--yb-mod-hover);
+}
+
+.awesome-yearbook-view .note-item > .yb-svg-icon {
+  color: var(--yb-text-faint);
+}
+
+.awesome-yearbook-view .note-item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.awesome-yearbook-view .note-item-title {
+  display: block;
+  overflow: hidden;
+  font-size: var(--yb-fs-m);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.awesome-yearbook-view .note-item-path {
+  display: block;
+  overflow: hidden;
+  color: var(--yb-text-faint);
+  font-family: var(--yb-font-mono);
+  font-size: var(--yb-fs-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.awesome-yearbook-view .note-item-meta {
+  flex: 0 0 auto;
+  text-align: right;
+  color: var(--yb-text-muted);
+  font-size: var(--yb-fs-xs);
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
+}
+
+.awesome-yearbook-view .empty {
+  padding: var(--yb-size-4-6) var(--yb-size-4-3);
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-s);
+  line-height: 1.7;
+  text-align: center;
+}
+
+.awesome-yearbook-view .yb-callout {
+  padding: var(--yb-size-4-3) var(--yb-size-4-4);
+  border: 1px solid color-mix(in srgb, var(--callout-color) 24%, transparent);
+  border-radius: var(--yb-radius-m);
+  background: color-mix(in srgb, var(--callout-color) 9%, transparent);
+}
+
+.awesome-yearbook-view .yb-callout-title {
+  display: flex;
+  align-items: center;
+  gap: var(--yb-size-4-2);
+  color: var(--callout-color);
+  font-size: var(--yb-fs-m);
+  font-weight: var(--yb-fw-sb);
+}
+
+.awesome-yearbook-view .yb-callout-content {
+  margin-top: var(--yb-size-4-1);
+  color: var(--yb-text-muted);
+  font-size: var(--yb-fs-s);
+  line-height: 1.65;
+}
+
+.awesome-yearbook-view .yb-callout.mod-tip {
+  --callout-color: var(--yb-cyan);
+}
+
+.awesome-yearbook-view .yb-callout.mod-warn {
+  --callout-color: var(--yb-orange);
+}
+
+.awesome-yearbook-view .yb-callout.mod-info {
+  --callout-color: var(--yb-accent);
+}
+
+/* ---- 7. yearbook ------------------------------------------------------- */
+.awesome-yearbook-view .year-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--yb-size-4-5);
+  padding: var(--yb-size-4-6) var(--yb-size-4-6) var(--yb-size-4-5);
+}
+
+.awesome-yearbook-view .year-hero-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--yb-size-4-4);
+}
+
+.awesome-yearbook-view .year-switch {
+  display: flex;
+  align-items: center;
+  gap: var(--yb-size-4-2);
+}
+
+.awesome-yearbook-view .year-switch b {
+  min-width: 78px;
+  font-size: 34px;
+  font-weight: var(--yb-fw-b);
+  letter-spacing: -1px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.awesome-yearbook-view .year-switch .icon-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.awesome-yearbook-view .year-scope {
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-s);
+}
+
+.awesome-yearbook-view .year-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--yb-size-4-2);
+  margin-left: auto;
+}
+
+.awesome-yearbook-view .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px var(--yb-size-4-3);
+  border-radius: 20px;
+  background: var(--yb-accent-faint);
+  color: var(--yb-text-accent);
+  font-size: var(--yb-fs-s);
+}
+
+.awesome-yearbook-view .badge.mod-plain {
+  border: 1px solid var(--yb-border);
+  background: var(--yb-bg-sunken);
+  color: var(--yb-text-muted);
+}
+
+.awesome-yearbook-view .year-headline {
+  font-size: 32px;
+  font-weight: var(--yb-fw-sb);
+  line-height: 1.25;
+  letter-spacing: -0.6px;
+}
+
+.awesome-yearbook-view .year-headline b {
+  margin: 0 4px;
+  color: var(--yb-text-accent);
+  font-size: 46px;
+  font-weight: var(--yb-fw-b);
+  letter-spacing: -2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.awesome-yearbook-view .year-sub {
+  margin-top: var(--yb-size-4-2);
+  color: var(--yb-text-muted);
+  font-size: var(--yb-fs-l);
+}
+
+.awesome-yearbook-view .yearbook-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 364px) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--yb-size-4-3);
+}
+
+.awesome-yearbook-view .card-stage {
+  position: sticky;
+  top: calc(var(--yb-header-h) + var(--yb-nav-h) + 12px);
+  padding: var(--yb-size-4-3);
+  border: 1px solid var(--yb-border);
+  border-radius: var(--yb-radius-l);
+  background: var(--yb-bg-panel);
+}
+
+.awesome-yearbook-view .card-stage canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--yb-radius-m);
+  box-shadow: var(--yb-shadow-m);
+}
+
+.awesome-yearbook-view .card-actions {
+  display: flex;
+  gap: var(--yb-size-4-2);
+  margin-top: var(--yb-size-4-4);
+}
+
+.awesome-yearbook-view .card-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yb-size-4-3);
+}
+
+.awesome-yearbook-view .card-stage figcaption {
+  margin-top: var(--yb-size-4-2);
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-xs);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.awesome-yearbook-view .yb-setting-item {
+  display: flex;
+  align-items: center;
+  gap: var(--yb-size-4-4);
+  padding: var(--yb-size-4-3) 0;
+  border-top: 1px solid var(--yb-border);
+}
+
+.awesome-yearbook-view .yb-setting-item:first-of-type {
+  padding-top: 0;
+  border-top: none;
+}
+
+/* A basis of 0 lets the module toggles squeeze this column to nothing; even
+   with a 45% basis, shrinking alongside their ~800px of max-content still
+   leaves a few characters per line. Not shrinking keeps the label readable and
+   makes the control wrap instead. */
+.awesome-yearbook-view .yb-setting-item-info {
+  flex: 1 0 45%;
+  min-width: 0;
+}
+
+.awesome-yearbook-view .yb-setting-item-name {
+  font-size: var(--yb-fs-m);
+}
+
+.awesome-yearbook-view .yb-setting-item-desc {
+  margin-top: 2px;
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-s);
+  line-height: 1.35;
+}
+
+.awesome-yearbook-view .yb-setting-item-control {
+  /* The control sizes from its content so it wraps instead of squeezing the
+     label column, which is pinned at 45%. */
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--yb-size-4-2);
+}
+
+.awesome-yearbook-view .yb-setting-item input[data-setting="goal"] {
+  width: 88px;
+}
+
+.awesome-yearbook-view .yb-setting-item input[data-setting="handle"] {
+  width: 160px;
+}
+
+.awesome-yearbook-view .palette-row {
+  display: flex;
+  gap: var(--yb-size-4-2);
+}
+
+.awesome-yearbook-view .palette {
+  width: 58px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--yb-radius-m);
+  background: none;
+  cursor: pointer;
+}
+
+.awesome-yearbook-view .palette i {
+  display: block;
+  height: 32px;
+  border-radius: var(--yb-radius-s);
+}
+
+.awesome-yearbook-view .palette span {
+  display: block;
+  padding-top: 3px;
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-xs);
+}
+
+.awesome-yearbook-view .palette.is-active {
+  border-color: var(--yb-accent);
+}
+
+.awesome-yearbook-view .palette.is-active span {
+  color: var(--yb-text-accent);
+}
+
+.awesome-yearbook-view .block-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--yb-size-4-3);
+}
+
+.awesome-yearbook-view .block-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--yb-text-muted);
+  font-size: var(--yb-fs-s);
+}
+
+/* Privacy is a mode, not a module, so it is set apart from the module row. */
+.awesome-yearbook-view .block-toggle.is-privacy {
+  padding-left: var(--yb-size-4-3);
+  border-left: 1px solid var(--yb-border);
+}
+
+.awesome-yearbook-view textarea {
+  width: 100%;
+  padding: var(--yb-size-4-3);
+  border: 1px solid var(--yb-border);
+  border-radius: var(--yb-radius-s);
+  background: var(--yb-bg-sunken);
+  color: var(--yb-text-muted);
+  font-family: inherit;
+  font-size: var(--yb-fs-s);
+  line-height: 1.75;
+  resize: vertical;
+}
+
+.awesome-yearbook-view .timeline {
+  position: relative;
+  padding-left: 16px;
+}
+
+.awesome-yearbook-view .timeline::before {
+  position: absolute;
+  top: 14px;
+  bottom: 14px;
+  left: 3px;
+  width: 2px;
+  background: var(--yb-border);
+  content: "";
+}
+
+.awesome-yearbook-view .timeline li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  gap: var(--yb-size-4-3);
+  padding: 9px 0;
+}
+
+.awesome-yearbook-view .timeline li::before {
+  position: absolute;
+  top: 15px;
+  left: -16px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--yb-accent);
+  box-shadow: 0 0 0 3px var(--yb-bg-panel);
+  content: "";
+}
+
+.awesome-yearbook-view .timeline li.is-muted::before {
+  background: var(--yb-base-40);
+}
+
+.awesome-yearbook-view .timeline time {
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-s);
+  font-variant-numeric: tabular-nums;
+}
+
+.awesome-yearbook-view .timeline b {
+  display: block;
+  font-size: var(--yb-fs-m);
+  font-weight: var(--yb-fw-m);
+}
+
+.awesome-yearbook-view .timeline span {
+  display: block;
+  margin-top: 1px;
+  color: var(--yb-text-muted);
+  font-size: var(--yb-fs-s);
+}
+
+/* ---- 8. overview ------------------------------------------------------- */
+.awesome-yearbook-view .today-panel {
+  background: var(--yb-bg-panel);
+}
+
+.awesome-yearbook-view .today-grid {
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr) 220px;
+  align-items: center;
+  gap: var(--yb-size-4-6);
+}
+
+.awesome-yearbook-view .ring {
+  position: relative;
+  width: 128px;
+  height: 128px;
+}
+
+.awesome-yearbook-view .ring svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.awesome-yearbook-view .ring-track {
+  fill: none;
+  stroke: var(--yb-border);
+  stroke-width: 9;
+}
+
+.awesome-yearbook-view .ring-fill {
+  fill: none;
+  stroke: var(--yb-accent);
+  stroke-width: 9;
+  stroke-linecap: round;
+}
+
+.awesome-yearbook-view .ring-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.awesome-yearbook-view .ring-label b {
+  font-size: 26px;
+  font-weight: var(--yb-fw-b);
+  letter-spacing: -0.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.awesome-yearbook-view .ring-label span {
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-s);
+}
+
+.awesome-yearbook-view .today-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--yb-size-4-4);
+}
+
+.awesome-yearbook-view .today-stats > div {
+  padding-left: var(--yb-size-4-3);
+  border-left: 2px solid var(--yb-border);
+}
+
+.awesome-yearbook-view .today-stats dt {
+  color: var(--yb-text-muted);
+  font-size: var(--yb-fs-s);
+}
+
+.awesome-yearbook-view .today-stats dd {
+  margin: 1px 0 0;
+  font-size: 21px;
+  font-weight: var(--yb-fw-sb);
+  letter-spacing: -0.3px;
+  font-variant-numeric: tabular-nums;
+}
+
+.awesome-yearbook-view .today-stats small {
+  display: block;
+  margin-top: 2px;
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-xs);
+  line-height: 1.4;
+}
+
+.awesome-yearbook-view .spark {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 58px;
+}
+
+.awesome-yearbook-view .spark span {
+  flex: 1;
+  min-height: 3px;
+  border-radius: 2px;
+  background: var(--yb-accent-soft);
+}
+
+.awesome-yearbook-view .spark span.is-empty {
+  background: var(--yb-border);
+}
+
+.awesome-yearbook-view .spark span.is-today {
+  background: var(--yb-accent);
+}
+
+.awesome-yearbook-view .spark-cap {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--yb-size-4-2);
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-xs);
+}
+
+/* ---- 9. health --------------------------------------------------------- */
+.awesome-yearbook-view .score-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--yb-size-4-6);
+}
+
+.awesome-yearbook-view .score {
+  flex: 0 0 auto;
+  text-align: center;
+}
+
+.awesome-yearbook-view .score b {
+  display: block;
+  color: var(--yb-text-accent);
+  font-size: 54px;
+  font-weight: var(--yb-fw-b);
+  line-height: 1;
+  letter-spacing: -2.5px;
+}
+
+.awesome-yearbook-view .score span {
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-s);
+}
+
+.awesome-yearbook-view .advice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--yb-size-4-3);
+}
+
+.awesome-yearbook-view .issue-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--yb-size-2-2);
+}
+
+.awesome-yearbook-view .issue {
+  display: flex;
+  align-items: center;
+  gap: var(--yb-size-4-3);
+  width: 100%;
+  padding: var(--yb-size-4-2);
+  border: 1px solid transparent;
+  border-radius: var(--yb-radius-s);
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.awesome-yearbook-view .issue:hover {
+  border-color: var(--yb-border);
+  background: var(--yb-mod-hover);
+}
+
+.awesome-yearbook-view .issue-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--yb-radius-s);
+  background: var(--yb-accent-faint);
+  color: var(--yb-text-accent);
+}
+
+.awesome-yearbook-view .issue.mod-warn .issue-icon {
+  background: rgb(233 151 63 / 16%);
+  color: var(--yb-orange);
+}
+
+.awesome-yearbook-view .issue.mod-error .issue-icon {
+  background: rgb(233 49 71 / 14%);
+  color: var(--yb-red);
+}
+
+.awesome-yearbook-view .issue-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.awesome-yearbook-view .issue-name {
+  display: block;
+  font-size: var(--yb-fs-m);
+}
+
+.awesome-yearbook-view .issue-desc {
+  display: block;
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-xs);
+}
+
+.awesome-yearbook-view .issue-count {
+  font-size: var(--yb-fs-l);
+  font-weight: var(--yb-fw-sb);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- 10. inspector / yb-notice / yb-modal ------------------------------------ */
+.awesome-yearbook-view .inspector {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  width: var(--yb-inspector-w);
+  border-left: 1px solid var(--yb-border);
+  background: var(--yb-bg-panel);
+  box-shadow: var(--yb-shadow-l);
+}
+
+.awesome-yearbook-view .inspector[hidden] {
+  display: none;
+}
+
+.awesome-yearbook-view .inspector-head {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--yb-size-4-2);
+  height: var(--yb-header-h);
+  padding: 0 var(--yb-size-4-2) 0 var(--yb-size-4-4);
+  border-bottom: 1px solid var(--yb-border);
+}
+
+.awesome-yearbook-view .inspector-head h2 {
+  flex: 1;
+  color: var(--yb-text-muted);
+  font-size: var(--yb-fs-s);
+  font-weight: var(--yb-fw-sb);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.awesome-yearbook-view .inspector-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 var(--yb-size-4-2) var(--yb-size-4-6);
+}
+
+.awesome-yearbook-view .detail-head {
+  padding: var(--yb-size-4-4) var(--yb-size-4-2) var(--yb-size-4-3);
+}
+
+.awesome-yearbook-view .detail-title {
+  font-size: var(--yb-fs-l);
+  font-weight: var(--yb-fw-sb);
+  line-height: 1.35;
+  word-break: break-all;
+}
+
+.awesome-yearbook-view .detail-sub {
+  margin-top: 2px;
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-s);
+}
+
+.awesome-yearbook-view .yb-notice {
+  position: absolute;
+  top: calc(var(--yb-header-h) + var(--yb-nav-h) + 12px);
+  right: var(--yb-size-4-6);
+  z-index: 60;
+  max-width: 320px;
+  padding: 9px var(--yb-size-4-3);
+  border-radius: var(--yb-radius-m);
+  background: var(--yb-base-100);
+  box-shadow: var(--yb-shadow-l);
+  color: var(--yb-base-00);
+  font-size: var(--yb-fs-s);
+}
+
+.awesome-yearbook-view .yb-notice[hidden] {
+  display: none;
+}
+
+.awesome-yearbook-view .yb-modal-container {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+}
+
+.awesome-yearbook-view .yb-modal-container[hidden] {
+  display: none;
+}
+
+.awesome-yearbook-view .yb-modal-bg {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 50%);
+}
+
+.awesome-yearbook-view .yb-modal {
+  position: relative;
+  width: min(560px, calc(100% - 40px));
+  max-height: 82%;
+  overflow-y: auto;
+  padding: var(--yb-size-4-6);
+  border: 1px solid var(--yb-border);
+  border-radius: var(--yb-radius-xl);
+  background: var(--yb-bg-panel);
+  box-shadow: var(--yb-shadow-l);
+}
+
+.awesome-yearbook-view .yb-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.awesome-yearbook-view .yb-modal-title {
+  margin-bottom: var(--yb-size-4-4);
+  font-size: var(--yb-fs-xl);
+  font-weight: var(--yb-fw-sb);
+}
+
+.awesome-yearbook-view .yb-setting-heading {
+  padding: var(--yb-size-4-5) 0 var(--yb-size-4-1);
+  border-top: none;
+  color: var(--yb-text-faint);
+  font-size: var(--yb-fs-s);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.awesome-yearbook-view .swatches {
+  display: flex;
+  gap: var(--yb-size-4-2);
+}
+
+.awesome-yearbook-view .swatch {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.awesome-yearbook-view .swatch.is-active {
+  border-color: var(--yb-text);
+}
+
+/* ---- 11. responsive ---------------------------------------------------- */
+@container yb (max-width: 1180px) {
+  .awesome-yearbook-view .stat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .awesome-yearbook-view .stat:nth-child(4) {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .awesome-yearbook-view .today-grid {
+    grid-template-columns: 120px minmax(0, 1fr);
+  }
+
+  .awesome-yearbook-view .today-spark {
+    display: none;
+  }
+}
+
+@container yb (max-width: 980px) {
+  .awesome-yearbook-view .yearbook-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .awesome-yearbook-view .card-stage {
+    position: static;
+    max-width: 400px;
+  }
+
+  .awesome-yearbook-view .panel-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .awesome-yearbook-view .today-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .awesome-yearbook-view .year-headline {
+    font-size: 26px;
+  }
+
+  .awesome-yearbook-view .year-headline b {
+    font-size: 38px;
+  }
+
+  .awesome-yearbook-view .advice-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@container yb (max-width: 640px) {
+  .awesome-yearbook-view .header-inner,
+  .awesome-yearbook-view .app-nav,
+  .awesome-yearbook-view .yb-page,
+  .awesome-yearbook-view .page-foot {
+    padding-right: var(--yb-size-4-4);
+    padding-left: var(--yb-size-4-4);
+  }
+
+  .awesome-yearbook-view .stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .awesome-yearbook-view .stat {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .awesome-yearbook-view .inspector {
+    width: 100%;
+  }
+
+  .awesome-yearbook-view .app-nav {
+    overflow-x: auto;
+  }
+
+  .awesome-yearbook-view .header-meta {
+    display: none;
+  }
+
+  /* Side by side, a wide control squeezes the label column down to a few
+     characters per line once the view is this narrow. Stack them instead. */
+  .awesome-yearbook-view .yb-setting-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .awesome-yearbook-view .yb-setting-item-control {
+    justify-content: flex-start;
+  }
+}

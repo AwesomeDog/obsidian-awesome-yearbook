@@ -1,0 +1,28 @@
+<!-- Project icon: the one copy, fed straight to addIcon(). It must carry no
+     width/height, because addIcon() nests this file inside a 0 0 100 100 <svg>
+     and an unsized nested svg fills that box, scaling the viewBox to it. Giving
+     it a width/height here would pin the drawing to 64x64 of that 100x100.
+     The viewBox crops to the drawing so the icon sits at native Lucide size in
+     the ribbon (content ~80% of the box, stroke ~7%), instead of the ~66% and
+     ~4% the full 64x64 box rendered it at. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="7 6 50 50" fill="none">
+    <rect x="12" y="14" width="40" height="38" rx="10"
+          stroke="#22c55e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <line x1="20" y1="10" x2="20" y2="18"
+          stroke="#22c55e" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="44" y1="10" x2="44" y2="18"
+          stroke="#22c55e" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="12" y1="24" x2="52" y2="24"
+          stroke="#22c55e" stroke-width="3.5" stroke-linecap="round"/>
+
+    <rect x="18" y="30" width="5" height="5" rx="1.5" fill="#22c55e" opacity="0.15"/>
+    <rect x="26" y="30" width="5" height="5" rx="1.5" fill="#22c55e" opacity="0.30"/>
+    <rect x="34" y="30" width="5" height="5" rx="1.5" fill="#22c55e" opacity="0.52"/>
+    <rect x="42" y="30" width="5" height="5" rx="1.5" fill="#22c55e" opacity="0.30"/>
+
+    <rect x="18" y="38" width="5" height="5" rx="1.5" fill="#22c55e" opacity="0.30"/>
+    <rect x="26" y="38" width="5" height="5" rx="1.5" fill="#22c55e" opacity="0.82"/>
+    <rect x="34" y="38" width="5" height="5" rx="1.5" fill="#22c55e" opacity="0.30"/>
+    <rect x="42" y="38" width="5" height="5" rx="1.5" fill="#22c55e" opacity="0.52"/>
+</svg>

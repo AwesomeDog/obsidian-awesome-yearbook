@@ -1,0 +1,8 @@
+node_modules/
+main.js
+data.json
+
+# Editors and OS
+.idea/
+.vscode/
+.DS_Store

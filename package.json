@@ -1,0 +1,36 @@
+{
+  "name": "obsidian-awesome-yearbook",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A dashboard of your vault's writing stats.",
+  "author": "AwesomeDog",
+  "license": "MIT",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "build": "npm run typecheck && npm test && node esbuild.config.mjs production",
+    "deploy": "node scripts/deploy.mjs",
+    "seed": "node scripts/seed.mjs",
+    "version": "node version-bump.mjs && git add manifest.json versions.json"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@types/node": "^26.3.0",
+    "echarts": "^5.5.0",
+    "esbuild": "^0.28.2",
+    "eslint": "^9.39.4",
+    "eslint-plugin-obsidianmd": "^0.4.0",
+    "globals": "^17.6.0",
+    "obsidian": "^1.13.1",
+    "prettier": "3.9.6",
+    "typescript": "5.9.2",
+    "typescript-eslint": "^8.59.1",
+    "vitest": "^4.1.11"
+  }
+}
