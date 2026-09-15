@@ -204,6 +204,15 @@ Please open an issue first for larger changes so we can discuss the design.
 
 ---
 
+## 🚢 Release
+
+```shell
+npm version patch                    # bump package.json, manifest.json, versions.json; commit and tag
+git push origin main --follow-tags   # push the commit and the tag
+```
+
+---
+
 ## ❤️ Support
 
 If Awesome Yearbook made you proud of your writing year:

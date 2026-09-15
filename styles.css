@@ -10,14 +10,21 @@
    ========================================================================= */
 
 /* The host is Obsidian's contentEl. Shadow !important rules keep its padding
-   and scrolling from being overridden by themes or snippets. */
+   and scrolling from being overridden by themes or snippets. Rules from the
+   inner tree only beat the outer tree's when they are important, so this
+   cannot be written without them. */
+/* stylelint-disable declaration-no-important */
 :host {
   padding: 0 !important;
   overflow: hidden !important;
 }
+/* stylelint-enable declaration-no-important */
 
 .awesome-yearbook-view {
-  /* Inherited properties cross the shadow boundary; colour variables do too. */
+  /* Inherited properties cross the shadow boundary; colour variables do too.
+     Naming every inherited property instead would still let a theme's own
+     ones through, and `all` is the only shorthand that covers future ones. */
+  /* stylelint-disable-next-line property-disallowed-list */
   all: initial;
   direction: ltr;
   color-scheme: inherit;
