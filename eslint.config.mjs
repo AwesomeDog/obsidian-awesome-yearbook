@@ -12,6 +12,7 @@ export default defineConfig(
     "version-bump.mjs",
     "scripts/deploy.mjs",
     "scripts/seed.mjs",
+    "scripts/social-preview.mjs",
     "package.json",
     "package-lock.json",
     "tsconfig.json",
