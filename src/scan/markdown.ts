@@ -1,4 +1,5 @@
 import type { CachedMetadata, ListItemCache } from "obsidian";
+import { STOP_WORDS } from "./stop-words";
 
 export interface MarkdownParseResult {
   wordCount: number;
@@ -8,53 +9,6 @@ export interface MarkdownParseResult {
   taskOpen: number;
   resourceRefs: string[];
 }
-
-const STOP_WORDS = new Set([
-  "a",
-  "an",
-  "and",
-  "are",
-  "as",
-  "at",
-  "be",
-  "by",
-  "for",
-  "from",
-  "in",
-  "is",
-  "it",
-  "of",
-  "on",
-  "or",
-  "that",
-  "the",
-  "this",
-  "to",
-  "was",
-  "with",
-  "的",
-  "了",
-  "和",
-  "是",
-  "在",
-  "有",
-  "我",
-  "你",
-  "他",
-  "她",
-  "它",
-  "这",
-  "那",
-  "与",
-  "及",
-  "也",
-  "就",
-  "都",
-  "而",
-  "不",
-  "为",
-  "一个",
-]);
 
 type Segment = { segment: string; isWordLike?: boolean };
 type SegmenterLike = { segment(input: string): Iterable<Segment> };
@@ -93,10 +47,12 @@ function segmentWords(
   segmenter: SegmenterLike | null = createSegmenter(),
 ): string[] {
   if (!segmenter) return [];
+  /* One character is never a catchphrase: in Chinese it is a particle, in
+     English it is "a" or "i". Two is the floor that keeps the card readable. */
   return [...segmenter.segment(text.normalize("NFC"))]
     .filter((part) => part.isWordLike)
     .map((part) => part.segment.normalize("NFC").toLocaleLowerCase("zh-CN"))
-    .filter((word) => word.length > 0 && !STOP_WORDS.has(word));
+    .filter((word) => word.length >= 2 && !STOP_WORDS.has(word));
 }
 
 function wordFrequency(
