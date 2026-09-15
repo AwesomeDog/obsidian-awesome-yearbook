@@ -124,6 +124,17 @@ describe("share card privacy mode", () => {
     expect(drawn()).toContain(t("This year, you wrote"));
   });
 
+  it("reads the month name from the dictionary, not the system locale", () => {
+    expect(cardText(model)).toContain("Jan");
+    setLanguage("zh");
+    try {
+      expect(cardText(model)).toContain("1 月");
+      expect(cardText(model)).not.toContain("Jan");
+    } finally {
+      setLanguage("en");
+    }
+  });
+
   it("masks the copied text too", () => {
     expect(cardText(model, true)).toContain("***");
     expect(cardText(model, true)).not.toContain("secret");

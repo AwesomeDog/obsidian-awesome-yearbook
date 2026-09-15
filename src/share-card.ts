@@ -166,10 +166,22 @@ function formatNumber(value: number): string {
   return Math.round(value).toLocaleString("en-US");
 }
 
+const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 function monthName(month: number): string {
-  return new Intl.DateTimeFormat(undefined, { month: "long" }).format(
-    new Date(2000, Math.max(0, month - 1), 1),
-  );
+  return t(MONTHS[Math.max(0, month - 1)] ?? "");
 }
 
 /* The card is painted on a canvas, so addIcon() cannot help here. The shapes are
