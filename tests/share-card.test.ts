@@ -20,10 +20,15 @@ function stubCanvas(): [HTMLCanvasElement, () => string] {
     stroke: () => {},
     fillRect: () => {},
     fillText: (value: string) => texts.push(value),
-    measureText: (value: string) => ({ width: value.length * 10 }),
+    /* Width has to follow the font that was set, or nothing that shrinks to
+       fit can be told apart from a fixed size. */
+    measureText: (value: string) => ({
+      width: value.length * (Number(/(\d+)px/.exec(ctx.font)?.[1]) || 10) * 0.5,
+    }),
     createLinearGradient: () => gradient,
     createRadialGradient: () => gradient,
     setTransform: () => {},
+    font: "",
   };
   const canvas = {
     width: 0,
@@ -139,5 +144,44 @@ describe("share card privacy mode", () => {
     expect(cardText(model, true)).toContain("***");
     expect(cardText(model, true)).not.toContain("secret");
     expect(cardText(model)).toContain("secret");
+  });
+});
+
+/* The note title used to be cut at nine characters whatever its width. Each
+   line is its own fillText, so the drawn strings give the lines back. */
+function starLines(title: string): string[] {
+  const [canvas, drawn] = stubCanvas();
+  drawShareCard(canvas, {
+    ...model,
+    representative: { ...NOTE, title },
+  } as unknown as YearbookModel);
+  return (/《(.*)》/.exec(drawn())?.[1] ?? "").split("|");
+}
+
+describe("note of the year title", () => {
+  it("leaves a short title alone", () => {
+    expect(starLines("Diary")).toEqual(["Diary"]);
+  });
+
+  it("shrinks a title that only just overflows", () => {
+    const title = "The Analytical Engine";
+    expect(starLines(title)).toEqual([title]);
+  });
+
+  it("wraps to two lines before it gives up on any of the title", () => {
+    const title = "Ada Lovelace on the Analytical Engine";
+    const lines = starLines(title);
+    expect(lines).toHaveLength(2);
+    expect(lines.join(" ")).toBe(title);
+  });
+
+  it("ellipsizes the last line only when two lines are not enough", () => {
+    const lines = starLines(
+      "Notes on the Analytical Engine and its consequences for the future of computing, written one long winter evening",
+    );
+    expect(lines).toHaveLength(2);
+    expect(lines[1]?.endsWith("…")).toBe(true);
+    /* Well past the old nine-character cut. */
+    expect(lines.join("").length).toBeGreaterThan(9);
   });
 });

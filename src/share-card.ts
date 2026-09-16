@@ -162,6 +162,51 @@ function measureText(
   return width;
 }
 
+/* One line while it fits, then two, and only then an ellipsis: a long title
+   reads better small and complete than full size and cut. */
+function fitTitle(
+  ctx: CanvasRenderingContext2D,
+  value: string,
+  maxWidth: number,
+  weight: number,
+): { lines: string[]; size: number } {
+  const min = 22;
+  const widest = (parts: string[], at: number) =>
+    Math.max(...parts.map((part) => measureText(ctx, part, at, weight)));
+  /* Break at the last space when there is one near the end of the line, and
+     between characters when there is not, as Chinese has no spaces. */
+  const wrap = (at: number): string[] => {
+    let cut = value.length;
+    while (
+      cut > 1 &&
+      measureText(ctx, value.slice(0, cut), at, weight) > maxWidth
+    )
+      cut--;
+    const space = value.lastIndexOf(" ", cut);
+    if (cut < value.length && space > cut * 0.6) cut = space;
+    /* No line starts on a closing mark; it joins the line below instead. */
+    while (cut > 1 && "、。，；：！？）》…".includes(value[cut] ?? "")) cut--;
+    return [value.slice(0, cut).trimEnd(), value.slice(cut).trimStart()].filter(
+      (part) => part.length > 0,
+    );
+  };
+  for (let at = 38; at >= min; at -= 2)
+    if (widest([value], at) <= maxWidth) return { lines: [value], size: at };
+  /* Two lines start smaller: they have to clear the label above them. */
+  for (let at = 30; at >= min; at -= 2) {
+    const lines = wrap(at);
+    if (widest(lines, at) <= maxWidth) return { lines, size: at };
+  }
+  const lines = wrap(min);
+  const last = lines[lines.length - 1] ?? "";
+  for (let cut = last.length - 1; cut > 0; cut--)
+    if (measureText(ctx, `${last.slice(0, cut)}…`, min, weight) <= maxWidth) {
+      lines[lines.length - 1] = `${last.slice(0, cut)}…`;
+      break;
+    }
+  return { lines, size: min };
+}
+
 function formatNumber(value: number): string {
   return Math.round(value).toLocaleString("en-US");
 }
@@ -688,15 +733,28 @@ const BLOCKS: Record<string, CardBlock> = {
         color: theme.muted,
       });
       if (!data.star) return;
-      const title =
-        data.star.title.length > 9
-          ? `${data.star.title.slice(0, 9)}…`
-          : data.star.title;
-      drawText(ctx, `《${title}》`, right + 32, y + 116, {
-        size: 38,
-        weight: 700,
-        color: theme.text,
-      });
+      /* The brackets are measured at full size, so they keep their shape
+         whatever size the title itself lands on. */
+      const bracket = measureText(ctx, "《》", 38, 700);
+      const { lines, size: titleSize } = fitTitle(
+        ctx,
+        data.star.title,
+        column - 64 - bracket,
+        700,
+      );
+      /* The words line below is fixed, so two lines are bottom aligned. */
+      const leading = Math.round(titleSize * 1.2);
+      const top =
+        lines.length > 1 ? y + 130 - (lines.length - 1) * leading : y + 116;
+      lines.forEach((line, index) =>
+        drawText(
+          ctx,
+          `${index === 0 ? "《" : ""}${line}${index === lines.length - 1 ? "》" : ""}`,
+          right + 32,
+          top + index * leading,
+          { size: titleSize, weight: 700, color: theme.text },
+        ),
+      );
       drawText(
         ctx,
         `${formatNumber(data.star.words)} ${t("words")}`,
