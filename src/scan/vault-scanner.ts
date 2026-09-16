@@ -52,6 +52,11 @@ export interface ScanOptions {
 
 /** Notes read between two yields to the event loop. */
 const BATCH_SIZE = 24;
+/* Reading is async, but parsing is not: a batch that lands between two yields
+   runs start to finish in one task. Yielding on a time budget instead of after
+   every batch keeps those tasks short on a slow disk and skips the pointless
+   yields on a fast one. */
+const YIELD_BUDGET_MS = 8;
 
 function normalizePath(path: string): string {
   return path.replaceAll("\\", "/").replace(/^\/+|\/+$/gu, "");
@@ -140,6 +145,7 @@ export async function scanVault(
       ambiguousBasenames.add(basename);
     }
   }
+  let sliceStart = Date.now();
   for (let index = 0; index < markdownFiles.length; index += BATCH_SIZE) {
     const batch = markdownFiles.slice(index, index + BATCH_SIZE);
     await Promise.all(
@@ -185,7 +191,10 @@ export async function scanVault(
       processed: Math.min(index + batch.length, markdownFiles.length),
       total: markdownFiles.length,
     });
-    if (index + BATCH_SIZE < markdownFiles.length) await yieldToEventLoop();
+    if (index + BATCH_SIZE >= markdownFiles.length) break;
+    if (Date.now() - sliceStart < YIELD_BUDGET_MS) continue;
+    await yieldToEventLoop();
+    sliceStart = Date.now();
   }
   notes.sort((a, b) => a.path.localeCompare(b.path));
   const noteByPath = new Map(

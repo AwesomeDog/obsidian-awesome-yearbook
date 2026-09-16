@@ -77,7 +77,12 @@ export class YearbookView extends ItemView {
     const resize = () => this.chartManager.resize();
     window.addEventListener("resize", resize);
     this.removeResize = () => window.removeEventListener("resize", resize);
-    await this.runScan();
+    /* Obsidian awaits onOpen() while it restores the workspace, so a scan
+       started here keeps the "Loading workspace" screen up for the whole run.
+       It also races the metadata cache: before the layout is ready the cache
+       is still empty and every link count comes back zero. */
+    this.setStatus(t("Waiting for scan"));
+    this.app.workspace.onLayoutReady(() => void this.runScan());
   }
 
   protected override async onClose(): Promise<void> {
