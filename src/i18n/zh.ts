@@ -1,6 +1,6 @@
 const zh = {
   "Awesome Yearbook": "Awesome Yearbook",
-  "By Awesome Yearbook": "By Awesome Yearbook",
+  "Awesome Yearbook for Obsidian": "Awesome Yearbook · Obsidian 插件",
   "Open yearbook": "打开年鉴",
   Rescan: "重新扫描",
   "View settings": "视图设置",

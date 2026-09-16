@@ -937,7 +937,7 @@ export function drawShareCard(
   ctx.moveTo(pad, footY - 44);
   ctx.lineTo(width - pad, footY - 44);
   ctx.stroke();
-  drawText(ctx, t("By Awesome Yearbook"), pad, footY, {
+  drawText(ctx, t("Awesome Yearbook for Obsidian"), pad, footY, {
     size: 24,
     weight: 600,
     color: theme.muted,
@@ -964,6 +964,6 @@ export function cardText(model: YearbookModel, privacy = false): string {
     star
       ? `${t("Note of the year")}: 《${mask(star.title, privacy)}》 ${formatNumber(star.wordCount)} ${t("words")}`
       : `${t("Note of the year")}: ${t("Unavailable")}`,
-    `— ${t("Awesome Yearbook")}`,
+    `— ${t("Awesome Yearbook for Obsidian")}`,
   ].join("\n");
 }
